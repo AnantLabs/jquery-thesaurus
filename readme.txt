@@ -1,4 +1,4 @@
-Thesaurus 
+Thesaurus
 ===================
 
 Version 3.0
@@ -9,32 +9,36 @@ Copyright (C) 2006-2010 Dmitry Sheiko
 Requirements:
 	PHP version 5.x+ (http://www.php.net)
 	Works with UNIX and Windows both
-	
 
-This toolkit is the simplest way to create own in-text advertising system 
-using IntelliTXT (IntelliImages/IntelliMedia) technology approach. 
 
-You need only to include on your site pages these java scripts and fill sample.csv 
-with you terms and their descriptions (ads). Now when a user of your site hovers mouse 
-cursor on a term from your list (sample.csv), he or she will get popup window (tooltip) 
-with related description. Notice this the script asks server for term description only 
+This toolkit is the simplest way to create own in-text advertising system
+using IntelliTXT (IntelliImages/IntelliMedia) technology approach.
+
+You need only to include on your site pages these java scripts and fill sample.csv
+with you terms and their descriptions (ads). Now when a user of your site hovers mouse
+cursor on a term from your list (sample.csv), he or she will get popup window (tooltip)
+with related description. Notice this the script asks server for term description only
 when user hovers mouse on the term.
 
-You can use this library to create portal news popup description, interactive reference 
-book and son on as well. 
+You can use this library to create portal news popup description, interactive reference
+book and son on as well.
 
-Thesaurus 3.0 is dramatically refactored. Here is the new features:
+FEATURES
+
 * Retrieving data though Cross-Domain Request. That allows you to have the same controller for
 instaces of Thesaurus on different domains.
 * Instancing of tooltips. When the term occures within the tooltip text it will cause
 another tooltip when hovering by mouse.
 * Effects. Different transition effects for tooltip apearace are available.
+* Auto-enable tooltips accoring to the term list received from the server
+* Sample package includes 2 data access adapters (CVS and MySQL DB)
+* Keeps stats of tooltip visiting and clicking
 
 HOW TO INSTALL
 
 Place all files into a folder (for instance, "/thesaurus/")
 Then add to HTML of your page thesaurus component:
- 
+
 <script src = "jquery.thesaurus.js" ></script>
 
 It is supposed jQuery is loaded as well.
