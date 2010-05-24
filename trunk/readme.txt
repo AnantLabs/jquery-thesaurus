@@ -4,10 +4,10 @@ Thesaurus
 Version 3.0
 ---------------------------
 
-Copyright (C) 2006-2007 Dmitry Sheiko
+Copyright (C) 2006-2010 Dmitry Sheiko
 
 Requirements:
-	PHP version 4.1.x+ (http://www.php.net) 
+	PHP version 5.x+ (http://www.php.net)
 	Works with UNIX and Windows both
 	
 
@@ -30,7 +30,7 @@ instaces of Thesaurus on different domains.
 another tooltip when hovering by mouse.
 * Effects. Different transition effects for tooltip apearace are available.
 
-How to install
+HOW TO INSTALL
 
 Place all files into a folder (for instance, "/thesaurus/")
 Then add to HTML of your page thesaurus component:
@@ -61,6 +61,11 @@ and MySQL DB. Please find examples of use in controller.csv.php and controller.d
 
 In the case of MySQL DB adapter you'll get tooltip visits and clicks statistics reflected into DB.
 You can easily write another adapter, which will implement Thesaurus_Adapter_Interface
+
+REFERENCES
+Source code is available to download at http://code.google.com/p/jquery-thesaurus/downloads/list
+Project page and SVN http://code.google.com/p/jquery-thesaurus/
+Live demo http://demo.dsheiko.com/thesaurus/
 
 Yours sincerely,
 Dmitry Sheiko,
