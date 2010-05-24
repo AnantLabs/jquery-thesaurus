@@ -19,11 +19,12 @@ var VERSION = "3.0",
         'div.thesaurus { font-size: 12px; font-family: Arial; position: absolute; width: 300px; z-index: auto; -moz-box-shadow: 5px 5px 5px #444; -webkit-box-shadow: 5px 5px 5px #444; }' +
         'div.thesaurus .thesaurus-header { padding: 5px;  background-color: #3C5F87; -moz-border-radius: 5px 5px 0 0; -webkit-border-radius: 5px 5px 0 0; }' +
         'div.thesaurus .thesaurus-header a { color: white; font-weight: bold; }' +
+        'div.thesaurus .thesaurus-header a.reference { position: absolute; right: 5px; z-index: auto; display: block; }' +
         'div.thesaurus .thesaurus-body { padding: 5px;  border: 1px solid #3C5F87; background-color: #fff; -moz-border-radius: 0 0 0 5px; -webkit-border-radius: 0 0 0 5px; }' +
         'dfn.thesaurus { text-decoration: none; font-style: inherit; border-bottom: 1px dashed black; cursor: pointer; }' +
         '.hidden {display: none}',
     TOOLTIP_LOADING_TPL = 'Loading...',
-    TOOLTIP_BODY_TPL = '<div class="thesaurus-header"><a target="_blank" href="http://dsheiko.com/freeware/">Thesaurus v.' + VERSION +'</a></div><div class="thesaurus-body"></div>';
+    TOOLTIP_BODY_TPL = '<div class="thesaurus-header"><a class="reference" target="_blank" href="http://dsheiko.com/freeware/">Thesaurus v.' + VERSION +'</a><a class="term"></a></div><div class="thesaurus-body"></div>';
 
 var Collection = function() { }
 /**
@@ -140,6 +141,7 @@ Tooltip.prototype = {
         this.boundingBox = $('#thesaurus-' + this.currentTarget.id);
         this.adjust();
         this.boundingBox.append(TOOLTIP_BODY_TPL);
+        this.boundingBox.find('a.term').html($(this.currentTarget).text());
         this.contentBox = this.boundingBox.find('div.thesaurus-body');
         this.contentBox.html(TOOLTIP_LOADING_TPL);
         if ($.fn.bgiframe) {
