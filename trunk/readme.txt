@@ -1,7 +1,7 @@
 Thesaurus
 ===================
 
-Version 3.0
+Version 3.0.2
 ---------------------------
 
 Copyright (C) 2006-2010 Dmitry Sheiko
@@ -33,6 +33,7 @@ another tooltip when hovering by mouse.
 * Auto-enable tooltips accoring to the term list received from the server
 * Sample package includes 2 data access adapters (CVS and MySQL DB)
 * Keeps stats of tooltip visiting and clicking
+* Support of UTF8. IMPORTANT: Make sure your CSV data source (file) is encoded as UTF8 wihout BOM
 
 HOW TO INSTALL
 
