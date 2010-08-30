@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Thesaurus
 *
 * @package thesaurus
@@ -10,7 +10,7 @@
 
 (function( $ ) {
 
-var VERSION = "3.0",
+var VERSION = "3.0.2",
     TPL_TAG_OPEN = '~~',
     TPL_TAG_CLOSE = '~~',
     ESCAPERS = '[\\s!;,%\"\'\\(\\)\\{\\}]',
@@ -330,8 +330,6 @@ Thesaurus.prototype = {
      */
     _onMouseOver : function(e) {
         var instance = Tooltip.show(e);
-        Tooltip.normalize($(e.currentTarget));
-
         var term = $(e.currentTarget).text();
         if (undefined !== this.cache[term]) {
             Tooltip.text(e, this.cache[term]);
