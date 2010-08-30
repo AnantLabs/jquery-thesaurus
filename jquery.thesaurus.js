@@ -330,6 +330,8 @@ Thesaurus.prototype = {
      */
     _onMouseOver : function(e) {
         var instance = Tooltip.show(e);
+        Tooltip.normalize($(e.currentTarget));
+
         var term = $(e.currentTarget).text();
         if (undefined !== this.cache[term]) {
             Tooltip.text(e, this.cache[term]);
@@ -491,6 +493,7 @@ $.Thesaurus = function(options) {
 // Authomaticaly applied when DOM is ready
 $(document).ready(function(){
     new Thesaurus(Thesaurus.options);
+
 });
 
 })( jQuery );

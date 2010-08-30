@@ -6,7 +6,7 @@
 * @author $Author: sheiko $
 * @copyright (c) Dmitry Sheiko http://dsheiko.com
 */
-
+header("Content-type: text/html; charset=UTF-8");
 define('LIBPATH', dirname(__FILE__) . "/thesaurus/");
 try {
 include LIBPATH . "controller.php";
