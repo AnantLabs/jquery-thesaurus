@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Thesaurus
 *
 * @package thesaurus
@@ -10,7 +10,7 @@
 
 (function( $ ) {
 
-var VERSION = "3.0.2",
+var VERSION = "3.0.3",
     TPL_TAG_OPEN = '~~',
     TPL_TAG_CLOSE = '~~',
     ESCAPERS = '[\\s!;,%\"\'\\(\\)\\{\\}]',
