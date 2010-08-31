@@ -18,6 +18,9 @@ class Thesaurus_Adapter_Db implements Thesaurus_Adapter_Interface
         try {
             mysql_connect($dbConfig["host"], $dbConfig["user"], $dbConfig["password"]);
             mysql_select_db($dbConfig["dbname"]);
+            mysql_query("set character_set_results=utf8");
+            mysql_query("set character_set_client=utf8");
+            mysql_query("set character_set_connection=utf8");
         } catch (Exception $e) {
             throw new Exception('Cannot connect DB ');
         }
