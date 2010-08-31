@@ -1,7 +1,7 @@
 Thesaurus
 ===================
 
-Version 3.0.2
+Version 3.0.3
 ---------------------------
 
 Copyright (C) 2006-2010 Dmitry Sheiko
