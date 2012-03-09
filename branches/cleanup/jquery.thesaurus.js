@@ -397,7 +397,7 @@ Thesaurus.prototype = {
      * @see _markTerm
      */
     _markup : function(node) {
-        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_OPEN, 'g');
+        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
         $(node).html($(node).html().replace(re, '<dfn class=\"thesaurus\">$1</dfn>'));
     },
     /**
@@ -407,7 +407,7 @@ Thesaurus.prototype = {
      * @see _processOverlayTooltip
      */
     _innerMarkup : function(node, parentId) {
-        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_OPEN, 'g');
+        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
         $(node).html($(node).html().replace(re, '<dfn rel=\"' + parentId
             + '\" class=\"thesaurus\">$1</dfn>'));
     },
