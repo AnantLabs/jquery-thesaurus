@@ -48,7 +48,7 @@ So that enough to start. Though if you want configure Thesaurus, please add:
 <script type="text/javascript">
     <!--
     $.Thesaurus({
-        caseSentitive: true, // Used when matching found terms againstloaded ones
+        caseSensitive: true, // Used when matching found terms againstloaded ones
         delay: 250, // Delay before tooltip self-destruction
         containers: ['div.message-box div.body'], // Put here list of selectors for the DOM element
                                                   // you want to analyze for terms

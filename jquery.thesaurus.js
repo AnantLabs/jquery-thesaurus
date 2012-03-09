@@ -10,11 +10,11 @@
 
 (function( $ ) {
 
-var VERSION = "3.0.3",
+var VERSION = "3.0.4",
     TPL_TAG_OPEN = '~~',
     TPL_TAG_CLOSE = '~~',
     ESCAPERS = '[\\s!;,%\"\'\\(\\)\\{\\}]',
-    UNAPPROPRIATE_TAGS = ['SCRIPT', 'BASE', 'LINK', 'META', 'STYLE', 'TITLE', 'APPLET', 'OBJECT'],
+    UNAPPROPRIATE_TAGS = ['SCRIPT', 'BASE', 'LINK', 'A', 'META', 'STYLE', 'TITLE', 'APPLET', 'OBJECT', 'A'],
     DEFAULTCSS_TPL =
         'div.thesaurus { font-size: 12px; font-family: Arial; position: absolute; width: 300px; z-index: auto; -moz-box-shadow: 5px 5px 5px #444; -webkit-box-shadow: 5px 5px 5px #444; }' +
         'div.thesaurus .thesaurus-header { padding: 5px;  background-color: #3C5F87; -moz-border-radius: 5px 5px 0 0; -webkit-border-radius: 5px 5px 0 0; }' +
@@ -224,7 +224,7 @@ Tooltip.prototype = {
      */
     delayedDestruction: function() {
         this.applyOnParent('delayedDestruction');
- 	this.timer = window.setTimeout($.proxy(this.destroy, this), this.options.delay);
+     this.timer = window.setTimeout($.proxy(this.destroy, this), this.options.delay);
     },
     /**
      * Removes Tooltip HTML container and instance ofthe class from the collection
@@ -239,30 +239,30 @@ Tooltip.prototype = {
     adjust : function() {
         var e = this.options.event, left, top;
 
-	var rCornerW = $(window).width() - e.clientX;
-	var bCornerH = $(window).height() - e.clientY;
+        var rCornerW = $(window).width() - e.clientX;
+        var bCornerH = $(window).height() - e.clientY;
 
-	// Compliance with HTML 4/XHTML
-	if(document.documentElement && document.documentElement.scrollTop)
+        // Compliance with HTML 4/XHTML
+        if(document.documentElement && document.documentElement.scrollTop)
             scrollTop = document.documentElement.scrollTop;
-	else
+        else
             scrollTop = document.body.scrollTop;
 
-	// Compliance with HTML 4/XHTML
-	if(document.documentElement && document.documentElement.scrollLeft)
+        // Compliance with HTML 4/XHTML
+        if(document.documentElement && document.documentElement.scrollLeft)
             scrollLeft = document.documentElement.scrollLeft;
-	else
+        else
             scrollLeft = document.body.scrollLeft;
 
 
-	if (rCornerW < this.boundingBox.offsetWidth)
+        if (rCornerW < this.boundingBox.offsetWidth)
             left = scrollLeft + e.clientX - this.boundingBox.offsetWidth;
-	else
+        else
             left = scrollLeft + e.clientX;
 
-	if (bCornerH < this.boundingBox.offsetHeight)
+        if (bCornerH < this.boundingBox.offsetHeight)
             top = scrollTop + e.clientY - this.boundingBox.offsetHeight;
-	else
+        else
             top = scrollTop + e.clientY;
 
         this.boundingBox.css("top", (top)+"px");
@@ -335,8 +335,8 @@ Thesaurus.prototype = {
             Tooltip.text(e, this.cache[term]);
             this._processOverlayTooltip(instance.contentBox, e.currentTarget);
         } else {
-            $.getScript(this.options.controller + "?term=" + term + "&caseSentitive="
-                + (this.options.caseSentitive ? 1 : 0), $.proxy(function(){
+            $.getScript(this.options.controller + "?term=" + term + "&caseSensitive="
+                + (this.options.caseSensitive ? 1 : 0), $.proxy(function(){
                 this.cache[term] = this._processResponse($.callbackData);
                 Tooltip.text(e, this.cache[term]);
                 this._processOverlayTooltip(instance.contentBox, e.currentTarget);
@@ -397,8 +397,10 @@ Thesaurus.prototype = {
      * @see _markTerm
      */
     _markup : function(node) {
-        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_OPEN, 'g');
-        $(node).html($(node).html().replace(re, '<dfn class=\"thesaurus\">$1</dfn>'));
+        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
+        $(node).html(function(inx, oldhtml) {
+            return oldhtml.replace(re, '<dfn class=\"thesaurus\">$1</dfn>');
+        });
     },
     /**
      * Parse especiall for tooltip over tooltip, to point parent tooltip id
@@ -407,9 +409,11 @@ Thesaurus.prototype = {
      * @see _processOverlayTooltip
      */
     _innerMarkup : function(node, parentId) {
-        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_OPEN, 'g');
-        $(node).html($(node).html().replace(re, '<dfn rel=\"' + parentId
-            + '\" class=\"thesaurus\">$1</dfn>'));
+        var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
+        $(node).html(function(inx, oldhtml) {
+            return oldhtml.replace(re, '<dfn rel=\"' + parentId
+              + '\" class=\"thesaurus\">$1</dfn>');
+        });
     },
     /**
      * Since I can't apply any HTML working with textNodes, just mark them to be able then
@@ -421,19 +425,19 @@ Thesaurus.prototype = {
     _markTerm : function(term, line) {
         var modifier = this.options.caseSensitive=="on"?"g":"gi";
         // Only term in nodeValue
-	if(term == line) {
+        if(term == line) {
             return TPL_TAG_OPEN + line + TPL_TAG_CLOSE;
         }
         //term" ....
-	var re = new RegExp("^("+term+")(" + ESCAPERS + ")", modifier);
-	line = line.replace(re, TPL_TAG_OPEN + "$1" + TPL_TAG_CLOSE + "$2");
+        var re = new RegExp("^("+term+")(" + ESCAPERS + ")", modifier);
+        line = line.replace(re, TPL_TAG_OPEN + "$1" + TPL_TAG_CLOSE + "$2");
         //... "term
-	re = new RegExp("(" + ESCAPERS + ")("+term+")$", modifier);
-	line = line.replace(re, "$1" + TPL_TAG_OPEN + "$2" + TPL_TAG_CLOSE);
+        re = new RegExp("(" + ESCAPERS + ")("+term+")$", modifier);
+        line = line.replace(re, "$1" + TPL_TAG_OPEN + "$2" + TPL_TAG_CLOSE);
         // .. "term" ..
-	re = new RegExp("(" + ESCAPERS + ")("+term+")(" + ESCAPERS + ")", modifier);
-	line = line.replace(re, "$1" + TPL_TAG_OPEN +"$2" + TPL_TAG_CLOSE + "$3");
-	return line;
+        re = new RegExp("(" + ESCAPERS + ")("+term+")(" + ESCAPERS + ")", modifier);
+        line = line.replace(re, "$1" + TPL_TAG_OPEN +"$2" + TPL_TAG_CLOSE + "$3");
+        return line;
     },
     /**
      * Check the node value against terms list
@@ -471,7 +475,7 @@ Thesaurus.prototype = {
  * Default configuration
  */
 Thesaurus.options = {
-    caseSentitive: true, // Used when matching found terms againstloaded ones
+    caseSensitive: true, // Used when matching found terms againstloaded ones
     delay: 250, // Delay before tooltip self-destruction
     containers: [], // Put here list of selectors for the DOM element you want to analyze for terms
     effect: null, // Can be also fade or slide
