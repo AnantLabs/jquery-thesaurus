@@ -28,14 +28,14 @@ header("Cross-domain-access: true");
 $.callbackData = {
     status : 'ok',
     errorMsg : '',
-    payload : <?=$output?>
+    payload : <?PHP echo $output?>
 };
 <?PHP
 } catch (Exception $e) {
 ?>
 $.callbackData = {
     status : 'fail',
-    errorMsg : '<?=$e->getMessage()?>',
+    errorMsg : '<?PHP echo $e->getMessage()?>',
     payload : null
 };
 <?PHP
