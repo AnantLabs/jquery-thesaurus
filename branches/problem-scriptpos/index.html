@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Thesaurus Tooltip jQuery Plugin Sample Page</title>
+    <meta name="description" content="This toolkit is the simplest way to create own in-text advertising system using IntelliTXT (IntelliImages/IntelliMedia) technology approach" />
+    <meta name="keywords" content="ad, advertising, dictionary, glossary, IntelliTXT, tooltip, RIA" />
+    <style>
+        body { background-color: #D8DCE0; font-family: Tahoma; font-size: 14px; }
+        div.message-box > div.header > h1 { font-family: Tahoma; color: #fff; font-size: 18px; }
+        h1 { color: #3C5F87; font-family: Tahoma; font-size: 18px; }
+        div.message-box {
+            padding: 0;
+            margin: 40px;
+            width: 70%;
+        }
+        div.message-box > div.header {
+            background-color: #3C5F87;
+            -moz-border-radius: 5px 5px 0 0;
+            -webkit-border-radius: 5px 5px 0 0;
+            padding: 10px 20px;
+        }
+        div.message-box > div.body {
+            padding: 10px 20px;
+            background-color: #fff;
+            -moz-border-radius: 0 0 5px 5px;
+            -webkit-border-radius: 0 0 5px 5px;
+        }
+        textarea {
+           width: 100%;
+           height: 170px;
+           padding: 5px;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/external/jquery.bgiframe-2.1.1.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="message-box">
+        <div class="header">
+            <h1>Thesaurus Tooltip jQuery Plugin Sample Page</h1>
+        </div>
+        <div class="body">
+
+    <script src="jquery.thesaurus.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    <!--
+    $.Thesaurus({
+        caseSensitive: false, // Used when matching found terms againstloaded ones
+        containers: ['div.message-box div.body'], // Put here list of selectors for the DOM element you want to analyze for terms
+        effect: null // Can be also fade or slide
+    });
+     // -->
+    </script>
+
+            <p>This toolkit is the simplest way to create own in-text advertising system
+            using IntelliTXT (IntelliImages/IntelliMedia) technology approach. </p>
+
+            <p>You need only to include on your site pages these java scripts and fill sample.csv
+                with you terms and their descriptions (ads). Now when a user of your site hovers
+                mouse cursor on a term from your list (sample.csv), he or she will get overlay
+                (tooltip) with related definition. Notice this the script asks server for
+                term description only when user hovers mouse on the term. Using DB data adapter,
+                you have visits and clicks statistics gathered for the tooltips.
+            </p>
+            <p>You can use this library to create portal news popup description,
+                interactive reference book and son on as well. </p>
+
+            <p>
+                Here is the new features of Thesaurus 3.0.3:
+                <ul>
+                    <li>Support of Unicode for terms and descriptions (проверка).</li>
+                    <li>Retrieving data though Cross-Domain Request. That allows you to have the same controller for
+                    instaces of Thesaurus on different domains. </li>
+                    <li>Instancing of tooltips. When the term occures within the tooltip text it will cause
+                    another tooltip when hovering by mouse.</li>
+                    <li>Effects. Different transition effects for tooltip apearace are available.</li>
+                </ul>
+
+             </p>
+
+            <p>References:</p>
+            <ul>
+                <li>Source code is available to download at <a href="http://code.google.com/p/jquery-thesaurus/downloads/list">Google Code</a></li>
+                <li>Project page and SVN <a href="http://code.google.com/p/jquery-thesaurus/">Google Code</a></li>
+                <li>Live demo <a href="http://demo.dsheiko.com/thesaurus/">demo.dsheiko.com</a></li>
+                <li>My other owork can be found <a href="http://dsheiko.com/freeware">here</a></li>
+            </ul>
+
+            <h1>Sample Text</h1>
+            
+            <p><STRONG>Acquisition</STRONG></p>
+            <ul type="square">
+                <li>Digital Asset Management, including built-in file browser with broad features of file classification, ability of file compositions creation</li>
+                <li>Document and file access permission management </li>
+                <li>CSV format supporting within data import</li>
+                <li>Data import and export by means of SOAP </li>
+            </ul>
+            <p></p>
+            <p><STRONG>Aggregation </STRONG></p>
+            <ul type="square">
+                <li>Data syndication formats supporting</li>
+                <li>Meta-data analysis for incoming data</li>
+                <li>Integrated web-services</li>
+            </ul>
+            <p></p>
+            <p><STRONG>Web-integration</STRONG></p>
+            <ul type="square">
+                <li>Ability of platform management interface creation onto external environments (API Site Sapiens 3.0 SOAP Server)</li>
+                <li>Ability of data synchronization between the Site Sapiens-based project repository and external heterogeneous networks. </li>
+                <li>Ability of data collection from external systems. </li>
+            </ul>
+            <p></p>
+            <p><STRONG>Authoring </STRONG></p>
+            <ul type="square">
+                <li>Management of information space structure by means of unified dynamic tree with branches, that can be downloaded by request on-the-fly. </li>
+                <li>Record repository management by means of grids</li>
+                <li>XML Sapiens 2.0 XML-based markup system, which allows flexible logical constructions. </li>
+                <li>Context-depended help</li>
+                <li>Unlimited nesting of record repository </li>
+                <li>Generation of content management interfaces on the basis of specified XML scheme.</li></ul>
+            <p></p>
+            <p><STRONG>Content organizing</STRONG> </p>
+            <ul type="square">
+                <li>Ability of content object classification (records, documents) within specified aspects in accordance with principles: one to many, many to many </li></ul>
+            <p></p>
+            <p><STRONG>Versioning </STRONG></p>
+            <ul type="square">
+                <li>Author documents/records version management </li>
+            </ul>
+            <p></p>
+            <p><STRONG>Personalization </STRONG></p>
+            <ul type="square">
+                <li>Setting of interface appearance (tree, grid, browsers), data selecting/filtering conditions. Restoring of user settings when he is turning to certain interface. </li>
+                <li>Actions tracking</li>
+            </ul>
+            <p></p>
+            <p><STRONG>Localization</STRONG></p>
+            <ul type="square">
+                <li>Multilingual GUI</li>
+                <li>UTF-8 system char set as standard</li>
+            </ul>
+            <p></p>
+            <p><STRONG>Reporting </STRONG></p>
+            <ul type="square">
+                <li>Ability of any system events tracking, monitors creation, assignation of reporting direction (server, email-addresses) </li></ul>
+            <p></p>
+            <p><STRONG>Security</STRONG></p>
+            <ul type="square">
+                <li>Encrypted sessions</li>
+                <li>Object (document, records, files) access permission management</li>
+            </ul>
+            <p></p>
+            <p><STRONG>Staging Server for QA</STRONG></p>
+            <ul type="square">
+                <li>Unit-test of all general system API </li>
+            </ul>
+            <p></p>
+            <p><STRONG>Content Delivery</STRONG></p>
+            <ul type="square">
+                <li>Publishing </li>
+                <ul type=circle>
+                    <li>Separate Delivery </li>
+                    <ul type="square">
+                        <li>Replication </li>
+                        <li>Synchronization of mirror sites</li>
+                    </ul>
+                </ul>
+            </ul>
+            <p></p>
+            <ul type="square">
+                <li>Multi-Publishing to different clients </li>
+                <ul type=circle>
+                    <li>PDA</li>
+                    <li>Cell phones</li>
+                </ul>
+                <li>Syndication</li>
+                <ul type=circle>
+                    <li>RDF Syndicated News Feeds </li>
+                    <li>Web-services</li>
+                </ul>
+            </ul>
+
+        </div>
+    </div>
+    
+</body>
+</html>
