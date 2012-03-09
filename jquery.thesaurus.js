@@ -398,7 +398,9 @@ Thesaurus.prototype = {
      */
     _markup : function(node) {
         var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
-        $(node).html($(node).html().replace(re, '<dfn class=\"thesaurus\">$1</dfn>'));
+        $(node).html(function(inx, oldhtml) {
+            return oldhtml.replace(re, '<dfn class=\"thesaurus\">$1</dfn>');
+        });
     },
     /**
      * Parse especiall for tooltip over tooltip, to point parent tooltip id
@@ -408,8 +410,10 @@ Thesaurus.prototype = {
      */
     _innerMarkup : function(node, parentId) {
         var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
-        $(node).html($(node).html().replace(re, '<dfn rel=\"' + parentId
-            + '\" class=\"thesaurus\">$1</dfn>'));
+        $(node).html(function(inx, oldhtml) {
+            return oldhtml.replace(re, '<dfn rel=\"' + parentId
+              + '\" class=\"thesaurus\">$1</dfn>');
+        });
     },
     /**
      * Since I can't apply any HTML working with textNodes, just mark them to be able then
