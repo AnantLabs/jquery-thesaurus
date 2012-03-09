@@ -23,7 +23,7 @@ $.callbackData = {
     errorMsg : '',
     payload : <?=$output?>
 };
-<?
+<?PHP
 } catch (Exception $e) {
 ?>
 $.callbackData = {
@@ -31,5 +31,5 @@ $.callbackData = {
     errorMsg : '<?=$e->getMessage()?>',
     payload : null
 };
-<?
+<?PHP
 }
