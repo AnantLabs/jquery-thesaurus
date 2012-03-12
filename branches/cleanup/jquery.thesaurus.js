@@ -14,7 +14,7 @@ var VERSION = "3.0.4",
     TPL_TAG_OPEN = '~~',
     TPL_TAG_CLOSE = '~~',
     ESCAPERS = '[\\s!;,%\"\'\\(\\)\\{\\}]',
-    UNAPPROPRIATE_TAGS = ['SCRIPT', 'BASE', 'LINK', 'A', 'META', 'STYLE', 'TITLE', 'APPLET', 'OBJECT', 'A'],
+    UNAPPROPRIATE_TAGS = ['SCRIPT', 'BASE', 'LINK', 'META', 'STYLE', 'TITLE', 'APPLET', 'OBJECT', 'A'],
     DEFAULTCSS_TPL =
         'div.thesaurus { font-size: 12px; font-family: Arial; position: absolute; width: 300px; z-index: auto; -moz-box-shadow: 5px 5px 5px #444; -webkit-box-shadow: 5px 5px 5px #444; }' +
         'div.thesaurus .thesaurus-header { padding: 5px;  background-color: #3C5F87; -moz-border-radius: 5px 5px 0 0; -webkit-border-radius: 5px 5px 0 0; }' +
