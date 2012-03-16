@@ -110,10 +110,10 @@ Tooltip.show = function(e) {
     var instance = Tooltip.collection.findById(e.currentTarget.id);
     if (null === instance) {
         instance = new Tooltip({
-                event: e,
-                delay :Thesaurus.options.delay,
-                effect :Thesaurus.options.effect
-            });
+            event: e,
+            delay :Thesaurus.options.delay,
+            effect :Thesaurus.options.effect
+        });
         Tooltip.collection.append(e.currentTarget.id, instance);
     } else {
         // The same term is hovered before it's tooltip self-destruction
@@ -224,7 +224,7 @@ Tooltip.prototype = {
      */
     delayedDestruction: function() {
         this.applyOnParent('delayedDestruction');
-     this.timer = window.setTimeout($.proxy(this.destroy, this), this.options.delay);
+        this.timer = window.setTimeout($.proxy(this.destroy, this), this.options.delay);
     },
     /**
      * Removes Tooltip HTML container and instance ofthe class from the collection
@@ -355,7 +355,7 @@ Thesaurus.prototype = {
      * @param string file
      */
     cssLoad : function(file) {
-            $('body').append('<style>' + DEFAULTCSS_TPL + '</style>');
+        $('body').append('<style>' + DEFAULTCSS_TPL + '</style>');
     },
     /**
      * Indicates message when an error occured retrieving data from seerver side
@@ -412,7 +412,7 @@ Thesaurus.prototype = {
         var re = new RegExp(TPL_TAG_OPEN + "(.*?)" + TPL_TAG_CLOSE, 'g');
         $(node).html(function(inx, oldhtml) {
             return oldhtml.replace(re, '<dfn rel=\"' + parentId
-              + '\" class=\"thesaurus\">$1</dfn>');
+                + '\" class=\"thesaurus\">$1</dfn>');
         });
     },
     /**
