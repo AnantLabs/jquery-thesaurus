@@ -4,20 +4,30 @@
 <script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
 </head>
 <body>
+
 <div>
-I want to replace in
-<script type="text/javascript">
-document.write("the middle");
-</script>
-of a node
+    I want to replace in
+    <script type="text/javascript">
+    document.write("the middle");
+    </script>    
+    of a node
+    <script type="text/javascript">
+    document.write(" and, besides to replace inside dynamically generated content ");
+    </script>
 </div>
+
 <script type="text/javascript">
-$(document).ready(function() {
-    $('div').find('script').detach();
-    $('div').html( function(idx, oldhtml) {
-        return oldhtml.replace('replace', '<a href="">replace</a>' );
+// let's take it out of the global scope
+(function() {
+    $(document).ready(function() {
+        var boundingBox = $('body > div'),
+        replaceHandler = function(idx, oldhtml) {
+            return oldhtml.replace(/replace/g, '<a href="">replace</a>' );
+        };
+        boundingBox.find('script').detach();
+        boundingBox.html(replaceHandler);        
     });
-});
+})();
 </script>
 </body>
 </html>
