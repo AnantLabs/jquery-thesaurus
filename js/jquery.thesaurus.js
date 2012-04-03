@@ -381,7 +381,7 @@ Thesaurus.prototype = {
      * 3) Marks up found terms
      * 4) Binds eventhandlers to them
      */
-    bootstrap : function() {
+    bootstrap : function() {        
         $.getScript(this.options.controller, $.proxy(function(){
             this.terms = this._processResponse($.callbackData);
             $.each(this.options.containers, $.proxy(function(i, node) {
@@ -475,7 +475,7 @@ Thesaurus.options = {
     delay: 250, // Delay before tooltip self-destruction
     containers: [], // Put here list of selectors for the DOM element you want to analyze for terms
     effect: null, // Can be also fade or slide
-    controller: 'controller.csv.php' // Path to the controller
+    controller: 'server.php' // Path to the server
 };
 // Alternative way to specify nodes you wat analyze for terms occurances
 // <code>

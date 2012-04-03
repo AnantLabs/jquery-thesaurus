@@ -1,13 +1,11 @@
 <?PHP
 /*
-* Thesaurus Abstract adapter
-*
 * @package Thesaurus
-* @author $Author: sheiko $
+* @author sheiko
 * @copyright (c) Dmitry Sheiko http://dsheiko.com
 */
 
-interface Thesaurus_Adapter_Interface
+interface Lib_Storage_Adapter_Interface
 {
     /**
      * Increments click stats for the term

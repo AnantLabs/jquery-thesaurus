@@ -1,28 +1,28 @@
 <?PHP
 /*
-* Thesaurus CSV adapter
-*
 * @package Thesaurus
-* @author $Author: sheiko $
+* @author sheiko
 * @copyright (c) Dmitry Sheiko http://dsheiko.com
 */
-include_once LIBPATH . "adapter/interface.php";
 
-class Thesaurus_Adapter_Db implements Thesaurus_Adapter_Interface
+include_once dirname(__FILE__) . "/Interface.php";
+
+class Lib_Storage_Adapter_Db implements Lib_Storage_Adapter_Interface
 {
     /**
      *
      * @param string $file CSV data file name
      */
-    public function  __construct($dbConfig) {
+    public function  __construct(Lib_Config $config) {
+        
         try {
-            mysql_connect($dbConfig["host"], $dbConfig["user"], $dbConfig["password"]);
-            mysql_select_db($dbConfig["dbname"]);
+            mysql_connect($config->dataSource->host, $config->dataSource->user, $config->dataSource->password);
+            mysql_select_db($config->dataSource->dbname);
             mysql_query("set character_set_results=utf8");
             mysql_query("set character_set_client=utf8");
             mysql_query("set character_set_connection=utf8");
         } catch (Exception $e) {
-            throw new Exception('Cannot connect DB ');
+            throw new Exception('Cannot connect DB');
         }
     }
 

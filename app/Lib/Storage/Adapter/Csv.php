@@ -1,22 +1,21 @@
 <?PHP
 /*
-* Thesaurus CSV adapter
-*
 * @package Thesaurus
-* @author $Author: sheiko $
+* @author sheiko
 * @copyright (c) Dmitry Sheiko http://dsheiko.com
 */
-include_once LIBPATH . "adapter/interface.php";
 
-class Thesaurus_Adapter_Csv implements Thesaurus_Adapter_Interface
+include_once dirname(__FILE__) . "/Interface.php";
+
+class Lib_Storage_Adapter_Csv implements Lib_Storage_Adapter_Interface
 {
     private $_file;
     /**
      *
      * @param string $file CSV data file name
      */
-    public function  __construct($file) {
-        $this->_file = $file;
+    public function  __construct(Lib_Config $config) {
+        $this->_file = $config->dataSource->file;
     }
     /**
      * Increments click stats for the term
