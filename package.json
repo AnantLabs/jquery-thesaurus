@@ -1,0 +1,22 @@
+{
+  "name": "jquery-thesaurus",
+  "title": "Thesaurus",
+  "version": "3.0",
+  "author": "Dmitry Sheiko",
+  "description": "This toolkit is the simplest way to create own in-text advertising system using IntelliTXT (IntelliImages/IntelliMedia) technology approach.",
+  "homepage": "http://code.google.com/p/jquery-thesaurus/",
+  "licenses": [
+   {
+       "type": "GPLv2",
+       "url": "http://www.example.com/licenses/gpl.html"
+   }],
+  "repository": {
+    "type": "svn",
+    "url": "http://jquery-thesaurus.googlecode.com/svn/trunk/"
+  },
+  "main": "./js/jquery.thesaurus.js",
+  "dependencies": {
+  },
+  "engines": {
+  }
+}
