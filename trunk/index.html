@@ -5,56 +5,133 @@
     <title>Thesaurus Tooltip jQuery Plugin Sample Page</title>
     <meta name="description" content="This toolkit is the simplest way to create own in-text advertising system using IntelliTXT (IntelliImages/IntelliMedia) technology approach" />
     <meta name="keywords" content="ad, advertising, dictionary, glossary, IntelliTXT, tooltip, RIA" />
-    <style>
-        body { background-color: #D8DCE0; font-family: Tahoma; font-size: 14px; }
-        div.message-box > div.header > h1 { font-family: Tahoma; color: #fff; font-size: 18px; }
-        h1 { color: #3C5F87; font-family: Tahoma; font-size: 18px; }
-        div.message-box {
-            padding: 0;
-            margin: 40px;
-            width: 70%;
-        }
-        div.message-box > div.header {
-            background-color: #3C5F87;
-            -moz-border-radius: 5px 5px 0 0;
-            -webkit-border-radius: 5px 5px 0 0;
-            padding: 10px 20px;
-        }
-        div.message-box > div.body {
-            padding: 10px 20px;
-            background-color: #fff;
-            -moz-border-radius: 0 0 5px 5px;
-            -webkit-border-radius: 0 0 5px 5px;
-        }
-        textarea {
-           width: 100%;
-           height: 170px;
-           padding: 5px;
-        }
+
+    <link rel="icon" href="./favicon.ico" type="image/ico" />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="./js/jquery.thesaurus.js" type="text/javascript"></script>
+
+    <!--[if lt IE 9]>
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+    <style type="text/css">
+    body {
+        background-color: #DDDDDD;
+        color: #222222;
+        font-family: MuseoSlab,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        line-height: 150%;
+    }
+
+    a, a:visited {
+        color: black;
+    }
+
+    body > section {
+        background-color: #FFFFFF;
+        -webkit-box-shadow: 4px 0 10px #CCCCCC, -4px 0 10px #CCCCCC, 0 38px 36px -24px #AAAAAA;
+         -moz-box-shadow: 4px 0 10px #CCCCCC, -4px 0 10px #CCCCCC, 0 38px 36px -24px #AAAAAA;
+          -o-box-shadow: 4px 0 10px #CCCCCC, -4px 0 10px #CCCCCC, 0 38px 36px -24px #AAAAAA;
+           box-shadow: 4px 0 10px #CCCCCC, -4px 0 10px #CCCCCC, 0 38px 36px -24px #AAAAAA;
+        margin: 0 auto;
+        max-width: 750px;
+        padding: 20px 40px 40px 40px;
+    }
+
+    section > header {
+        background-color: #3C5F87;
+        -moz-border-radius:5px;
+        -webkit-border-radius:5px;
+        border-radius:5px;
+        -khtml-border-radius:5px;
+        padding: 20px 20px;
+        margin-top: 0px;
+    }
+    header h1 {
+        text-shadow: 2px 2px 2px #333333;
+        font-size: 32px;
+        line-height: 120%;
+        margin: 0;
+        color: white;
+    }
+    header h2 {
+        text-shadow: 2px 2px 2px #333333;
+        font-size: 18px;
+        margin: 3px;
+        color: white;
+        line-height: 140%;
+    }
+    article {
+        padding: 14px 0;
+    }
+     a.button {
+            display: block;
+            position: relative;
+            border:1px solid #bbb;
+            -moz-border-radius:3px;
+            -webkit-border-radius:3px;
+            border-radius:3px;
+            -khtml-border-radius:3px;
+            background: -moz-linear-gradient(100% 100% 90deg, #eee, #d5d5d5);
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#d5d5d5));
+            background: -webkit-linear-gradient(#eee, #d5d5d5);
+            background: -o-linear-gradient(#eee, #d5d5d5);
+            color:#232d3d;
+            font-size: 20px;
+            font-weight:bold;
+            padding:4px 10px;
+            margin: 30px auto;
+            text-shadow:0px 1px 0px #fff;
+            cursor:pointer;
+            box-shadow:0px 1px 2px #ccc;
+            -moz-box-shadow:0px 1px 2px #ccc;
+            -webkit-box-shadow:0px 1px 2px #ccc;
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+            max-width: 500px;
+    }
+    textarea.code {
+            border: 0;
+            background-color: #EEE;
+            background-image: none;
+            color: #222222;
+            font: 14px Arial;
+            display: inline;
+            width: 100%;
+            height: auto;
+            padding: 10px;
+    }
+    var {
+        font-weight: bold;
+    }
     </style>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/external/jquery.bgiframe-2.1.1.js" type="text/javascript"></script>
-    <script src="jquery.thesaurus.js" type="text/javascript"></script>
+
     <script type="text/javascript">
     <!--
     $.Thesaurus({
         caseSentitive: false, // Used when matching found terms against loaded ones
-        containers: ['div.message-box div.body'], // Put here list of selectors for the DOM element you want to analyze for terms
+        containers: ['article'], // Put here list of selectors for the DOM element you want to analyze for terms
         effect: null // Can be also fade or slide
     });
      // -->
     </script>
 </head>
 <body>
-    <div class="message-box">
-        <div class="header">
-            <h1>Thesaurus Tooltip jQuery Plugin Sample Page</h1>
-        </div>
-        <div class="body">
-
-            <p>This toolkit is the simplest way to create own in-text advertising system
-            using IntelliTXT (IntelliImages/IntelliMedia) technology approach. </p>
-
+<section>
+        <header>
+            <hgroup>
+                <h1>Thesaurus Tooltip jQuery Plugin</h1>
+                <h2>This toolkit is the simplest way to create own in-text advertising system
+            using IntelliTXT (IntelliImages/IntelliMedia) technology approach.</h2>
+            </hgroup>
+        </header>
+        <article>
+       
             <p>You need only to include on your site pages these java scripts and fill sample.csv
                 with you terms and their descriptions (ads). Now when a user of your site hovers
                 mouse cursor on a term from your list (sample.csv), he or she will get overlay
@@ -179,9 +256,14 @@
                     <li>Web-services</li>
                 </ul>
             </ul>
+        </article>
+        <footer>
+            <p><a class="button" href="http://code.google.com/p/jquery-thesaurus/downloads/list">Download the latest version</a></p>
+            <p><var>Thesaurus</var> is created by <a href="http://dsheiko.com">Dmitry Sheiko</a>.
+                It's released under the GPLv2 license. If you have any questions or feedback you can use the <a href="http://code.google.com/p/jquery-thesaurus/">project page.</a></p>
 
-        </div>
-    </div>
+        </footer>
+    </section>
     
 </body>
 </html>
