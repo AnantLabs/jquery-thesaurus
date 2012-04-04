@@ -109,19 +109,24 @@
     var {
         font-weight: bold;
     }
+    dfn.thesaurus {
+        border-bottom: 1px dotted; 
+    }
     </style>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
     <!--
-    $.Thesaurus({
-        caseSentitive: false, // Used when matching found terms against loaded ones
-        containers: ['article'], // Put here list of selectors for the DOM element you want to analyze for terms
-        effect: null // Can be also fade or slide
+    $(document).ready(function(){
+        $('article').Thesaurus({
+            caseSentitive: false, // Used when matching found terms against loaded ones
+            effect: null // Can be also fade or slide
+        });
     });
      // -->
     </script>
 </head>
 <body>
+    
 <section>
         <header>
             <hgroup>
