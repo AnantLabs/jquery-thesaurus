@@ -25,14 +25,11 @@ class Lib_Dispatcher
     {
         include_once APPPATH . "/Controller/Index.php";
         $controller = new Controller_Index($this->_storage, $this->_view);
-
-        if (isset ($request['term']) && isset ($request['onclick'])) {
-           return $controller->onclickAction($this->_storage);
-        } elseif (isset ($request['term'])) {
-           return $controller->termDefAction($this->_storage);
-        } else {
-            return $controller->termListAction($this->_storage);
+        $methodName = $_GET["action"] . "Action";
+        if (method_exists($controller, $methodName)){            
+            return $controller->$methodName();
         }
+        return false;
     }
 
 }

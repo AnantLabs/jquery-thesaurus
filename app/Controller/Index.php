@@ -20,8 +20,6 @@ class Controller_Index {
         $this->_storage = $storage;
         $this->_view = &$view;
     }
-
-
     /**
      * Increments click stats for the term
      *
@@ -33,10 +31,10 @@ class Controller_Index {
      * @param array $glossary
      * @return void
      */
-    public function onclickAction(Thesaurus_Adapter_Interface $adapter)
+    public function onclickAction()
     {
         $term = $_REQUEST['term'];
-        $glossary = $adapter->incrementClickStat($term);
+        $glossary = $this->_storage->incrementClickStat($term);
     }
     /**
      * Get JSON-like output with term list
@@ -46,10 +44,10 @@ class Controller_Index {
      * @param array $glossary
      * @return void
      */
-    public function termListAction(Thesaurus_Adapter_Interface $adapter)
+    public function termListAction()
     {
         $out = "";
-        $glossary = $adapter->getData();
+        $glossary = $this->_storage->getData();
         foreach ($glossary as $term => $def) {
             $out .= "'" . Lib_Mbstring::ordString($term) . "',\n";
         }
@@ -63,18 +61,18 @@ class Controller_Index {
      *    caseSentitive :boolean
      * }
      *
-     * @param Thesaurus_Adapter_Interface $adapter
+     * @param 
      * @return void
      */
-    public function termDefAction(Thesaurus_Adapter_Interface $adapter)
+    public function termDefAction()
     {
-        $term = $_REQUEST['term'];
+        $term = urldecode($_REQUEST['term']);
         $caseSentitive = isset($_REQUEST['caseSentitive']) ? $_REQUEST['caseSentitive'] : false;
         if (!trim($term)) {
             throw new Exception('Invalid term given (' . $term . ')');
         }
         $this->_view->data = "'" . addslashes(
-               $adapter->findDefinition($term, $caseSentitive)
+               $this->_storage->findDefinition($term, $caseSentitive)
         ) . "'";
         $this->_view->data = preg_replace("/[\n\r]/", " ", $this->_view->data);
     }
