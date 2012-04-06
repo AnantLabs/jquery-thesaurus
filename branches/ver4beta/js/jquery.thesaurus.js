@@ -64,8 +64,8 @@
                         callback(_termCache[term]);
                         return;
                     }
-                    $.getScript(SERVER_LOC + _urlEncode("?action=termDef&term=" + term 
-                        + "&caseSensitive=" + (_settings.caseSensitive ? 1 : 0)), function() {
+                    $.getScript(SERVER_LOC + "?action=termDef&term=" + _urlEncode(term) 
+                        + "&caseSensitive=" + (_settings.caseSensitive ? 1 : 0), function() {
                         _termCache[term] = $.callbackData.payload;
                         callback(_termCache[term]);
                     });
@@ -106,7 +106,7 @@
                     }).bind('mouseleave', this, function(e){
                         e.data.hide();
                     }).bind('click', this, function(e){
-                        $.getScript(SERVER_LOC + _urlEncode("?action=onclick&term=" + term));
+                        $.getScript(SERVER_LOC + "?action=onclick&term=" + _urlEncode(term));
                     })
                     _adjustPositionByTarget(targetEl);
                     // Fetches and appends definition text into the tooltip
