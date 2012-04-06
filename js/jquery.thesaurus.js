@@ -24,21 +24,32 @@
         'dfn.thesaurus { text-decoration: none; font-style: inherit; border-bottom: 1px dashed black; cursor: pointer; }',
         TOOLTIP_TPL = '<div class="thesaurus"><div class="thesaurus-header"><a class="reference" target="_blank" href="http://dsheiko.com/freeware/">Thesaurus v.' + VERSION +'</a><a class="term"></a></div><div class="thesaurus-body">Loading...</div></div>',
         TOOLTIP_HIDE_TIMEOUT = 100,
-        Repository = {
-            terms: {} // Cache of term list 
+        Repository = { // Global repository
+            termsList: {}, // Cache of term list 
+            termsDef: {},  // Cache of term definitions
+            targetId: 0,
+            termViews: {}
         },
         Tooltip = function(settings, parent) {
             var _settings = settings,
                 _parent = parent,
                 _boundingBox = null,
                 _hideTimer = null,
-                _termCache = {},
+                _id = 0,
                 /**
                  * Encode strings with spaces correctly
                  * @param string text
                  */
                 _urlEncode = function(text) {
                     return encodeURIComponent(text.replace(/ /g, "+"));
+                },
+                /**
+                 * Collect term view stats, which can be pushed to the server with session close
+                 * @param tring term
+                 */
+                _incrementViewStats = function(term) {
+                    Repository.termViews[term] = typeof Repository.termViews[term] === "undefined" 
+                        ? 1 :  Repository.termViews[term]++;
                 },
                 /**
                  * Adjusts position (top/left) of the tooltip overlay relatively to term element
@@ -60,14 +71,14 @@
                  * Fetches definitiion of the provided term by XMLHttpRequest or from cache
                  */
                 _fetchDefinition = function(term, callback){
-                    if (typeof _termCache[term] !== "undefined") {
-                        callback(_termCache[term]);
+                    if (typeof Repository.termsDef[term] !== "undefined") {
+                        callback(Repository.termsDef[term]);
                         return;
                     }
                     $.getScript(SERVER_LOC + "?action=termDef&term=" + _urlEncode(term) 
                         + "&caseSensitive=" + (_settings.caseSensitive ? 1 : 0), function() {
-                        _termCache[term] = $.callbackData.payload;
-                        callback(_termCache[term]);
+                        Repository.termsDef[term] = $.callbackData.payload;
+                        callback(Repository.termsDef[term]);
                     });
                 };
             return {
@@ -90,11 +101,17 @@
                  * @param jQuery Node
                  **/
                 show: function(targetEl) {
-                    var term = targetEl.text(), scope = this;
-                    // Happens when mouse cursor moves from overlay to the link
-                    if ($(_boundingBox).hasClass('thesaurus-visible')) {
+                    var term = targetEl.text(), id = targetEl.data('id'), scope = this;
+                    
+                    _incrementViewStats(term);
+                    
+                    // Happens when mouse cursor moves from overlay to the target link
+                    if (id && _id === id && _boundingBox.hasClass('thesaurus-visible')) {
                         this.cancelHiding();
                         return;
+                    }
+                    if (typeof id === "undefined") {
+                        targetEl.data('id', _id = ++Repository.targetId);
                     }
                     $(_boundingBox).remove();
                     // Renders tooltip with Loading...
@@ -187,7 +204,7 @@
                })
                .each(function(){
                    var node = this;
-                   $.each(Repository.terms, function(id, term){
+                   $.each(Repository.termsList, function(id, term){
                        node.nodeValue = _markTermInTextNodeText(node.nodeValue, term);
                    })
                });
@@ -222,12 +239,12 @@
             loadTerms: function(callback) {
                 var scope = this;
                 // Term list is already cached
-                if (Repository.terms.length) {
+                if (Repository.termsList.length) {
                     callback.call(scope);
                     return;
                 }
                 $.getScript(SERVER_LOC + "?action=termList", function(){
-                    Repository.terms = $.callbackData.payload;
+                    Repository.termsList = $.callbackData.payload;
                     callback.call(scope);
                 });
             },
