@@ -7,9 +7,21 @@
 
 class Lib_Dispatcher
 {
+    /**
+     *
+     * @var Lib_Storage_Adapter_Interface
+     */
     private $_storage;
+    /**
+     *
+     * @var Lib_View 
+     */
     private $_view;
-
+    /**
+     *
+     * @param Lib_Storage_Adapter_Interface $storage
+     * @param Lib_View $view 
+     */
     public function  __construct(Lib_Storage_Adapter_Interface $storage, Lib_View &$view)
     {
         $this->_storage = $storage;
@@ -25,14 +37,11 @@ class Lib_Dispatcher
     {
         include_once APPPATH . "/Controller/Index.php";
         $controller = new Controller_Index($this->_storage, $this->_view);
-
-        if (isset ($request['term']) && isset ($request['onclick'])) {
-           return $controller->onclickAction($this->_storage);
-        } elseif (isset ($request['term'])) {
-           return $controller->termDefAction($this->_storage);
-        } else {
-            return $controller->termListAction($this->_storage);
+        $methodName = $_GET["action"] . "Action";
+        if (method_exists($controller, $methodName)){            
+            return $controller->$methodName();
         }
+        return false;
     }
 
 }

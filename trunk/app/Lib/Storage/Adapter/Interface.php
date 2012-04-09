@@ -15,6 +15,11 @@ interface Lib_Storage_Adapter_Interface
      */
     public function incrementClickStat($term);
     /**
+    * Increment view stats of each term of given associative array
+    * @param array $stats 
+    */
+    public function commitViewStat(array $stats);
+    /**
      * Get glossary
      *
      * @return array

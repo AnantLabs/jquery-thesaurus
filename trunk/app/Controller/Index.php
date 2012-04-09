@@ -13,43 +13,36 @@ class Controller_Index {
     /**
      *
      * @param Thesaurus_Adapter_Interface $storage data access adapter
-     * @param reference $output
+     * @param Lib_View $view
      */
     public function  __construct(Lib_Storage_Adapter_Interface $storage, Lib_View &$view)
     {
         $this->_storage = $storage;
         $this->_view = &$view;
     }
-
-
     /**
-     * Increments click stats for the term
-     *
-     * $_REQUEST {
-     *    term :string
-     *    onclick: boolean
-     * }
-     *
-     * @param array $glossary
-     * @return void
+     * Increments view stats       *
      */
-    public function onclickAction(Thesaurus_Adapter_Interface $adapter)
+    public function onviewAction()
+    {
+        $stats = json_decode($_REQUEST['stats']);
+        $this->_storage->commitViewStat($stats);
+    }
+    /**
+     * Increments click stats for the term    
+     */
+    public function onclickAction()
     {
         $term = $_REQUEST['term'];
-        $glossary = $adapter->incrementClickStat($term);
+        $this->_storage->incrementClickStat($term);
     }
     /**
      * Get JSON-like output with term list
-     *
-     * $_REQUEST {}
-     *
-     * @param array $glossary
-     * @return void
      */
-    public function termListAction(Thesaurus_Adapter_Interface $adapter)
+    public function termListAction()
     {
         $out = "";
-        $glossary = $adapter->getData();
+        $glossary = $this->_storage->getData();
         foreach ($glossary as $term => $def) {
             $out .= "'" . Lib_Mbstring::ordString($term) . "',\n";
         }
@@ -62,19 +55,16 @@ class Controller_Index {
      *    term :string
      *    caseSentitive :boolean
      * }
-     *
-     * @param Thesaurus_Adapter_Interface $adapter
-     * @return void
      */
-    public function termDefAction(Thesaurus_Adapter_Interface $adapter)
+    public function termDefAction()
     {
-        $term = $_REQUEST['term'];
+        $term = urldecode($_REQUEST['term']);
         $caseSentitive = isset($_REQUEST['caseSentitive']) ? $_REQUEST['caseSentitive'] : false;
         if (!trim($term)) {
             throw new Exception('Invalid term given (' . $term . ')');
         }
         $this->_view->data = "'" . addslashes(
-               $adapter->findDefinition($term, $caseSentitive)
+               $this->_storage->findDefinition($term, $caseSentitive)
         ) . "'";
         $this->_view->data = preg_replace("/[\n\r]/", " ", $this->_view->data);
     }

@@ -5,10 +5,22 @@
 * @copyright (c) Dmitry Sheiko http://dsheiko.com
 */
 
+include_once dirname(__FILE__) . "/Config/Exception.php";
+
 class Lib_Config
 {
+    /**
+     * Config repository
+     * @var array
+     */
     private $_data = null;
 
+    /**
+     *
+     * @param type $dataSource
+     * @return Lib_Config
+     * @throws Exception 
+     */
     public function  __construct($dataSource)
     {
          if (is_null($dataSource)) {
@@ -18,7 +30,7 @@ class Lib_Config
             $dataSource = $this->_loadData($dataSource);
         }
         if (!is_array($dataSource)) {
-            throw new Exception('Invalid data source');
+            throw new Lib_Config_Exception('Invalid data source');
         }
         $this->_data = array();
         foreach ($dataSource as $key => $value) {
@@ -31,7 +43,7 @@ class Lib_Config
     }
 
     /**
-     * Load data from source code
+     * Loads data from source code
      *
      * @param string $path
      * @return array | string
@@ -53,7 +65,7 @@ class Lib_Config
     }
 
     /**
-     * Retrieve a value and return $default if there is no element set.
+     * Retrieves a value
      *
      * @param string $name
      * @return mixed
