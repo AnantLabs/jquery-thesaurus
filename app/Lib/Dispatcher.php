@@ -7,9 +7,21 @@
 
 class Lib_Dispatcher
 {
+    /**
+     *
+     * @var Lib_Storage_Adapter_Interface
+     */
     private $_storage;
+    /**
+     *
+     * @var Lib_View 
+     */
     private $_view;
-
+    /**
+     *
+     * @param Lib_Storage_Adapter_Interface $storage
+     * @param Lib_View $view 
+     */
     public function  __construct(Lib_Storage_Adapter_Interface $storage, Lib_View &$view)
     {
         $this->_storage = $storage;

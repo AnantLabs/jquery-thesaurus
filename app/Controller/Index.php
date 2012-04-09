@@ -13,7 +13,7 @@ class Controller_Index {
     /**
      *
      * @param Thesaurus_Adapter_Interface $storage data access adapter
-     * @param reference $output
+     * @param Lib_View $view
      */
     public function  __construct(Lib_Storage_Adapter_Interface $storage, Lib_View &$view)
     {
@@ -21,28 +21,23 @@ class Controller_Index {
         $this->_view = &$view;
     }
     /**
-     * Increments click stats for the term
-     *
-     * $_REQUEST {
-     *    term :string
-     *    onclick: boolean
-     * }
-     *
-     * @param array $glossary
-     * @return void
+     * Increments view stats       *
+     */
+    public function onviewAction()
+    {
+        $stats = json_decode($_REQUEST['stats']);
+        $this->_storage->commitViewStat($stats);
+    }
+    /**
+     * Increments click stats for the term    
      */
     public function onclickAction()
     {
         $term = $_REQUEST['term'];
-        $glossary = $this->_storage->incrementClickStat($term);
+        $this->_storage->incrementClickStat($term);
     }
     /**
      * Get JSON-like output with term list
-     *
-     * $_REQUEST {}
-     *
-     * @param array $glossary
-     * @return void
      */
     public function termListAction()
     {
@@ -60,9 +55,6 @@ class Controller_Index {
      *    term :string
      *    caseSentitive :boolean
      * }
-     *
-     * @param 
-     * @return void
      */
     public function termDefAction()
     {

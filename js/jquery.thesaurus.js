@@ -15,54 +15,126 @@
         ESCAPERS = '[\\s!;,%\"\'\\(\\)\\{\\}]',
         SERVER_LOC = 'server.php',
         UNAPPROPRIATE_TAGS = ['SCRIPT', 'BASE', 'LINK', 'META', 'STYLE', 'TITLE', 'APPLET', 'OBJECT'],
-        CSS_TPL =
-        'div.thesaurus { font-size: 12px; font-family: Arial; position: absolute; width: 300px; z-index: auto; box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -o-box-shadow: 0 0 5px #000000; -ie-box-shadow: 0 0 5px #000000; border-radius: 5px; opacity: 0; }' + 
-        'div.thesaurus .thesaurus-header { padding: 5px;  background-color: #3C5F87; border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; -webkit-border-radius: 5px 5px 0 0;  -o-border-radius: 5px 5px 0 0;  -ie-border-radius: 5px 5px 0 0; }' +
+        CSS_TPL = 
+        'div.thesaurus { font-size: 12px; font-family: Arial; position: absolute; width: 300px; z-index: auto;  box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -o-box-shadow: 0 0 5px #000000; -ie-box-shadow: 0 0 5px #000000; border-radius: 5px;  -moz-border-radius: 5px; -webkit-border-radius: 5px; -o-border-radius: 5px; -ie-border-radius: 5px; }' +
+        'div.thesaurus > div.thesaurus-canvas { position: relative; }' +
+        'div.thesaurus .thesaurus-header {  padding: 6px;  background-color: #3C5F87;  border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; -webkit-border-radius: 5px 5px 0 0;  -o-border-radius: 5px 5px 0 0;  -ie-border-radius: 5px 5px 0 0;  }' +
         'div.thesaurus .thesaurus-header a { color: white; font-weight: bold; }' +
-        'div.thesaurus .thesaurus-header a.reference { position: absolute; right: 5px; z-index: auto; display: block; }' +
-        'div.thesaurus .thesaurus-body { padding: 5px;  border: 1px solid #3C5F87; background-color: #fff; border-radius: 0 0 5px 5px; -moz-border-radius: 0 0 5px 5px; -webkit-border-radius: 0 0 5px 5px; -o-border-radius: 0 0 5px 5px; -ie-border-radius: 0 0 5px 5px; }' +
-        'dfn.thesaurus { text-decoration: none; font-style: inherit; border-bottom: 1px dashed black; cursor: pointer; }',
-        TOOLTIP_TPL = '<div class="thesaurus"><div class="thesaurus-header"><a class="reference" target="_blank" href="http://dsheiko.com/freeware/">Thesaurus v.' + VERSION +'</a><a class="term"></a></div><div class="thesaurus-body">Loading...</div></div>',
+        'div.thesaurus .thesaurus-header a.reference { position: absolute; right: 6px; z-index: auto; display: block; }' +
+        'div.thesaurus .thesaurus-body { padding: 5px;  border: 1px solid #3C5F87; background-color: #fff; border-radius: 0 0 5px 5px; -moz-border-radius: 0 0 5px 5px; -webkit-border-radius: 0 0 5px 5px; -o-border-radius: 0 0 5px 5px; -ie-border-radius: 0 0 5px 5px;  }' +
+        'dfn.thesaurus { text-decoration: none; font-style: inherit; border-bottom: 1px dashed black; cursor: pointer; }' + 
+        "div.thesaurus > div.thesaurus-canvas:after { content: ''; position: absolute; width: 0; height: 0; border: 5px solid; }" +
+        'div.thesaurus > div.thesaurus-canvas.upwards:after { border-color: #3C5F87 transparent transparent transparent; top: 100%; }' +
+        'div.thesaurus > div.thesaurus-canvas.rightwards:after { margin-left: 10px; left: 0; }' +
+        'div.thesaurus > div.thesaurus-canvas.leftwards:after { margin-right: 10px; right: 0; }' + 
+        'div.thesaurus > div.thesaurus-canvas.downwards:after { border-color: transparent transparent #3C5F87 transparent;  bottom: 100%; }' +
+        '.thesaurus-fade-start { opacity: 0; }' +
+        '.thesaurus-fade-end { -webkit-transition: opacity 1s ease-in-out;  -moz-transition: opacity 1s ease-in-out; -o-transition: opacity 1s ease-in-out; transition: opacity 1s ease-in-out; opacity: 1 !important; }',
+    
+        TOOLTIP_TPL = '<div class="thesaurus"><div class="thesaurus-canvas"><div class="thesaurus-header"><a class="reference" target="_blank" href="http://dsheiko.com/freeware/">Thesaurus v.' + VERSION +'</a><a class="term"></a></div><div class="thesaurus-body">Loading...</div></div></div>',
         TOOLTIP_HIDE_TIMEOUT = 100,
+        PUSH_TIMEOUT = 5000,
+        thesaurusInstance = null,
         Repository = { // Global repository
-            termsList: {}, // Cache of term list 
             termsDef: {},  // Cache of term definitions
-            targetId: 0,
-            termViews: {}
+            targetId: 0
         },
-        Tooltip = function(settings, parent) {
-            var _settings = settings,
+        /**
+         * Thesaurus Data Access Object
+         */
+        DAO = {
+            /**
+            * Encode strings with spaces correctly
+            * @param string text
+            */
+            _urlEncode: function(text) {
+                return encodeURIComponent(text.replace(/ /g, "+"));
+            },
+            /**
+             * Makes a JSONP request to server
+             * @param string action
+             * @param string term
+             * @param boolean caseSensitive
+             * @param function callback
+             */
+            request: function(action, data, callback) {
+                
+                $.getScript(SERVER_LOC + "?action=" + action 
+                    + (typeof data.term !== "undefined"
+                        ? "&term=" + DAO._urlEncode(data.term) : "")
+                    + (typeof data.stats !== "undefined"
+                        ? "&stats=" + DAO._urlEncode(data.stats) : "")
+                    + (typeof data.caseSensitive !== "undefined" 
+                        ? "&caseSensitive=" + (data.caseSensitive * 1) : ""), callback);
+            }
+        }
+        /**
+         * Statistics collector
+         */
+        Stats = function() {
+            var _termViews = {},
+                _pushCb = function() {
+                    if (Object.keys(_termViews).length) {
+                        DAO.request("onview", {'stats': JSON.stringify(_termViews)}, function() {
+                            _termViews = {};
+                        });
+                    }
+                };
+            return {
+                establishServerPushConnection: function() {                    
+                    window.setInterval(_pushCb, PUSH_TIMEOUT);
+                    $(window).unload(_pushCb);
+                },
+                /**
+                 * Collect term view stats, which can be pushed to the server with session close
+                 * @param string term
+                 */
+                incrementTermViews: function(term) {
+                    term = (term + "").toLowerCase();
+                    _termViews[term] = typeof _termViews[term] === "undefined" 
+                        ? 1 :  _termViews[term] + 1;
+                },
+                /**
+                 * Collect term click stats
+                 * @param string term
+                 */
+                incrementTermClicks: function(term) {
+                    DAO.request("onclick", {'term': term});
+                }
+            }
+        },
+        /**
+         * Tooltip manager
+         * @param Tooltip parent - the link to the parent tooltip if one exists
+         */
+        Tooltip = function(parent) {
+            var _settings = thesaurusInstance.getSettings(),
+                _statsInstance = thesaurusInstance.getStatsInstance(),
                 _parent = parent,
                 _boundingBox = null,
                 _hideTimer = null,
                 _id = 0,
                 /**
-                 * Encode strings with spaces correctly
-                 * @param string text
-                 */
-                _urlEncode = function(text) {
-                    return encodeURIComponent(text.replace(/ /g, "+"));
-                },
-                /**
-                 * Collect term view stats, which can be pushed to the server with session close
-                 * @param tring term
-                 */
-                _incrementViewStats = function(term) {
-                    Repository.termViews[term] = typeof Repository.termViews[term] === "undefined" 
-                        ? 1 :  Repository.termViews[term]++;
-                },
-                /**
                  * Adjusts position (top/left) of the tooltip overlay relatively to term element
                  */
                 _adjustPositionByTarget = function(targetEl) {
                     var top = targetEl.offset().top - 5 - _boundingBox.height(),
-                        left = targetEl.offset().left + targetEl.width() / 2;
-
-                    top = top  < 0 ? targetEl.offset().top + targetEl.height()
-                        + 5 : top;
-                    left = left > $(window).width() - _boundingBox.width() ?
-                        targetEl.offset().left - _boundingBox.width() + targetEl.width() / 2 : left;
-
+                        left = targetEl.offset().left + targetEl.width() / 2,
+                        canvas = _boundingBox.find(' > .thesaurus-canvas');
+                    
+                    if (top  < $(window).scrollTop()) {
+                        top = targetEl.offset().top + targetEl.height() + 5;
+                        canvas.addClass('downwards');
+                    } else {
+                        canvas.addClass('upwards');
+                    }
+                    
+                    if (left > $(window).width() - _boundingBox.width()) {
+                        left = targetEl.offset().left - _boundingBox.width() + targetEl.width() / 2;
+                        canvas.addClass('leftwards');
+                    } else {
+                        canvas.addClass('rightwards');
+                    }
                     _boundingBox
                             .css("top", Math.floor(top))
                             .css("left", Math.floor(left))
@@ -75,26 +147,44 @@
                         callback(Repository.termsDef[term]);
                         return;
                     }
-                    $.getScript(SERVER_LOC + "?action=termDef&term=" + _urlEncode(term) 
-                        + "&caseSensitive=" + (_settings.caseSensitive ? 1 : 0), function() {
+                    DAO.request("termDef", {'term' : term, 
+                        'caseSensitive' : _settings.caseSensitive}, function() {
                         Repository.termsDef[term] = $.callbackData.payload;
                         callback(Repository.termsDef[term]);
                     });
+                },
+                /**
+                 * Assigns CSS3 transition effect, if any specified
+                 * @param string state
+                 */
+                _setTransitionState = function(state) {
+                     if (_settings.effect) {
+                         _boundingBox.addClass('thesaurus-' + _settings.effect + '-' + state);
+                     }  
                 };
             return {
-                init: function() {
-                    this.syncUI();
-                },
                 /**
                  * Subscribes handlers on hover events on the terms elements in DOM
                  */
-                syncUI : function() {
-                    settings.nodes.find('dfn.thesaurus').unbind().bind("mouseenter", this, function(e){
+                syncUI: function(nodes) {
+                    nodes.find('dfn.thesaurus').unbind().bind("mouseenter", this, function(e){
                         e.data.show($(this));
                     }).bind('mouseleave', this, function(e){
                         e.data.hide();
                     });
-
+                },
+                /**
+                 * Subscribes handlers on events within tooltip overlay
+                 * @param string term
+                 */
+                syncOverlayUI : function(term) {
+                     _boundingBox.unbind().bind("mouseenter", this, function(e){
+                        e.data.cancelHiding();
+                    }).bind('mouseleave', this, function(e){
+                        e.data.hide();
+                    }).bind('click', this, function(){
+                       _statsInstance.incrementTermClicks(term);
+                    })
                 },
                 /** 
                  * Renders tooltip overlay
@@ -103,7 +193,7 @@
                 show: function(targetEl) {
                     var term = targetEl.text(), id = targetEl.data('id'), scope = this;
                     
-                    _incrementViewStats(term);
+                    _statsInstance.incrementTermViews(term);
                     
                     // Happens when mouse cursor moves from overlay to the target link
                     if (id && _id === id && _boundingBox.hasClass('thesaurus-visible')) {
@@ -117,21 +207,21 @@
                     // Renders tooltip with Loading...
                     _boundingBox = $(TOOLTIP_TPL).appendTo('body');
                     _boundingBox.find('a.term').text(term);
-
-                    _boundingBox.addClass('thesaurus-visible').unbind().bind("mouseenter", this, function(e){
-                        e.data.cancelHiding();
-                    }).bind('mouseleave', this, function(e){
-                        e.data.hide();
-                    }).bind('click', this, function(e){
-                        $.getScript(SERVER_LOC + "?action=onclick&term=" + _urlEncode(term));
-                    })
+                    _boundingBox
+                        .addClass('thesaurus-visible');
+                    _setTransitionState('start'); 
+                    
+                    
+                    this.syncOverlayUI(term);
+                   
                     _adjustPositionByTarget(targetEl);
                     // Fetches and appends definition text into the tooltip
                     _fetchDefinition(term, function(def){
-                        _boundingBox.find('div.thesaurus-body').html(def).Thesaurus(_settings, scope);
+                        thesaurusInstance.run(
+                            _boundingBox.find('div.thesaurus-body').html(def), scope);
                         _adjustPositionByTarget(targetEl);
                     });
-                    _boundingBox.animate({opacity: 0.9});                    
+                    _setTransitionState('end');
                 },
                 /**
                  * Cancel destroying
@@ -150,20 +240,25 @@
                         _parent.hide();
                     }
                     window.clearTimeout(_hideTimer);
-                    _hideTimer = window.setTimeout(function(){
-                        _boundingBox.fadeOut('fast', function(){
-                            $(this).removeClass('thesaurus-visible').remove();
-                        });
+                    _hideTimer = window.setTimeout(function(){                        
+                        _boundingBox
+                            .removeClass('thesaurus-visible').remove();
                     }, TOOLTIP_HIDE_TIMEOUT);
                 }
             }
         },
-        Thesaurus = function(settings, parent) {
-        var _settings = $.extend({
+        
+        /**
+         * Plugin's manager
+         */
+        Thesaurus = function(settings) {
+            var _settings = $.extend({
                 caseSensitive: false,
-                effect: null
+                effect: null,
+                pushStats: false                
             }, settings),
-            _tooltip = new Tooltip(settings, parent),
+            _terms = {},
+            _statsInstance = new Stats(),
             /**
             * Since I know no way to insert an ElementNode into a TextNode, here the found term
             * is marked with special text tags, to be found and replaced aftewards within DOM
@@ -204,7 +299,7 @@
                })
                .each(function(){
                    var node = this;
-                   $.each(Repository.termsList, function(id, term){
+                   $.each(_terms, function(id, term){
                        node.nodeValue = _markTermInTextNodeText(node.nodeValue, term);
                    })
                });
@@ -222,15 +317,19 @@
             };
 
         return {
-            init: function() {
+            init: function(callback) {
+               if (_settings.pushStats) {
+                   _statsInstance.establishServerPushConnection();
+               }
                this.renderUI();
-               this.loadTerms(function() {
-                   // Method is invoked as soon as the terms are loaded
-                   _markTermsInDOM(settings.nodes);
-                   _wrapTermsInDOM(settings.nodes);
-                   _tooltip.init();
-               });
+               this.loadTerms(callback);
                return this;
+            },
+            run: function(nodes, parent) {
+                _markTermsInDOM(nodes);
+                _wrapTermsInDOM(nodes);
+                var tooltipInstance = new Tooltip(parent)
+                tooltipInstance.syncUI(nodes);
             },
             /**
              * Loads terms map {id : term} from the data source
@@ -238,13 +337,8 @@
              */
             loadTerms: function(callback) {
                 var scope = this;
-                // Term list is already cached
-                if (Repository.termsList.length) {
-                    callback.call(scope);
-                    return;
-                }
-                $.getScript(SERVER_LOC + "?action=termList", function(){
-                    Repository.termsList = $.callbackData.payload;
+                DAO.request("termList", {}, function(){
+                    _terms = $.callbackData.payload;
                     callback.call(scope);
                 });
             },
@@ -254,6 +348,18 @@
             renderUI : function() {
                 // Append CSS
                 $('body').append('<style type="text/css">' + CSS_TPL + '</style>');
+            },
+            /**
+             * Public accessor
+             */
+            getSettings: function() {
+                return _settings;
+            },
+            /**
+             * Public accessor
+             */
+            getStatsInstance: function() {
+                return _statsInstance; 
             }
 
     }};
@@ -261,10 +367,17 @@
      * @param object settings
      * @param Thesaurus parent - required only when Thesaurus instatiated to parse tooltip's content
      */
-    $.fn.Thesaurus = function(settings, parent) {
-        settings.nodes = $(this);
-        var instace = new Thesaurus(settings, parent);
-        return instace.init();
+    $.fn.Thesaurus = function(settings) {
+        var nodes = $(this);
+        if (thesaurusInstance === null) {
+            thesaurusInstance = new Thesaurus(settings);
+            thesaurusInstance.init(function(){
+                thesaurusInstance.run(nodes);
+            });
+        } else {
+            thesaurusInstance.run(nodes);
+        }
     };
+    
 
 }( jQuery ));

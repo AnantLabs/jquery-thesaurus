@@ -14,7 +14,8 @@ class Lib_Storage_Adapter_Csv implements Lib_Storage_Adapter_Interface
      *
      * @param string $file CSV data file name
      */
-    public function  __construct(Lib_Config $config) {
+    public function  __construct(Lib_Config $config) 
+    {
         $this->_file = $config->dataSource->file;
     }
     /**
@@ -23,14 +24,23 @@ class Lib_Storage_Adapter_Csv implements Lib_Storage_Adapter_Interface
      * @param string $term
      * @return void
      */
-    public function incrementClickStat($term) {
+    public function incrementClickStat($term) 
+    {
+    }
+   /**
+    * Increment view stats of each term of given associative array
+    * @param array $stats 
+    */
+    public function commitViewStat(array $stats) 
+    {        
     }
     /**
      * Get glossary
      * 
      * @return array
      */
-    public function getData() {
+    public function getData() 
+    {
         $glossary = array();
         try {
         $data = file($this->_file);
@@ -39,7 +49,7 @@ class Lib_Storage_Adapter_Csv implements Lib_Storage_Adapter_Interface
             $glossary[$parts[0]] = $parts[1];
         }
         } catch (Exception $e) {
-            throw new Exception('Cannot open file ' . $this->_file);
+            throw new Lib_Storage_Exception('Cannot open file ' . $this->_file);
         }
         return $glossary;
     }
@@ -49,10 +59,14 @@ class Lib_Storage_Adapter_Csv implements Lib_Storage_Adapter_Interface
      * @param boolean $caseSentitive
      * @return string
      */
-    public function findDefinition($term, $caseSentitive) {
+    public function findDefinition($term, $caseSentitive) 
+    {
+        if (empty ($term)) {
+            throw new Lib_Storage_Exception('Term must not be empty');
+        }
         $glossary = $this->getData();
         if (empty ($glossary)) {
-            throw new Exception('Glossary is empty');
+            throw new Lib_Storage_Exception('Glossary is empty');
         }
         foreach ($glossary as $fTerm => $def) {
             if (true == $caseSentitive && 0 === strcmp($fTerm, $term)) {

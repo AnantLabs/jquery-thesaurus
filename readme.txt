@@ -1,71 +1,86 @@
 Thesaurus
 ===================
 
-Version 3.0.3
+Version 4.0
 ---------------------------
 
-Copyright (C) 2006-2010 Dmitry Sheiko
+Copyright (C) 2006-2012 Dmitry Sheiko
 
 Requirements:
 	PHP version 5.x+ (http://www.php.net)
 	Works with UNIX and Windows both
 
 
-This toolkit is the simplest way to create own in-text advertising system
-using IntelliTXT (IntelliImages/IntelliMedia) technology approach.
+You can apply the plugin for content areas on your site pages and it will highlight all the terms 
+from the dictionary (by default: sample.csv). When hovering a term, visitors of your site will get 
+definition of the term on a tooltip. Content of the appeared tooltip is being processed as well. 
+So if any terms are encountered , they get definition-tooltips attached. If you switch to DB 
+data-source, you will have visits and click statistics collected.
 
-You need only to include on your site pages these java scripts and fill sample.csv
-with you terms and their descriptions (ads). Now when a user of your site hovers mouse
-cursor on a term from your list (sample.csv), he or she will get popup window (tooltip)
-with related description. Notice this the script asks server for term description only
-when user hovers mouse on the term.
+You can use this plugin to create intelligent advertisement, tooltip to show portal news 
+description, interactive reference book and so on and so forth. 
 
-You can use this library to create portal news popup description, interactive reference
-book and son on as well.
+Usage and API
 
-FEATURES
+Step 1
+Unpack the package into a folder on your server. Include the plugin script after 
+jQuery (requires jQuery 1.4+):
 
-* Retrieving data though Cross-Domain Request. That allows you to have the same controller for
-instaces of Thesaurus on different domains.
-* Instancing of tooltips. When the term occures within the tooltip text it will cause
-another tooltip when hovering by mouse.
-* Effects. Different transition effects for tooltip apearace are available.
-* Auto-enable tooltips accoring to the term list received from the server
-* Sample package includes 2 data access adapters (CVS and MySQL DB)
-* Keeps stats of tooltip visiting and clicking
-* Support of UTF8. IMPORTANT: Make sure your CSV data source (file) is encoded as UTF8 wihout BOM
+<script src="./js/jquery.thesaurus.js" type="text/javascript"></script>
 
-HOW TO INSTALL
 
-Place all files into a folder (for instance, "/thesaurus/")
-Then add to HTML of your page thesaurus component:
+Step 2
 
-<script src = "jquery.thesaurus.js" ></script>
+Now let's apply the plugin on a set of elements when document is ready. Here any article 
+elements on the page will be parsed for thesaurus terms:
 
-It is supposed jQuery is loaded as well.
-So that enough to start. Though if you want configure Thesaurus, please add:
-
-<script type="text/javascript">
-    <!--
-    $.Thesaurus({
-        caseSentitive: true, // Used when matching found terms againstloaded ones
-        delay: 250, // Delay before tooltip self-destruction
-        containers: ['div.message-box div.body'], // Put here list of selectors for the DOM element
-                                                  // you want to analyze for terms
-        effect: null, // Can be also fade or slide,
-        controller: 'controller.csv.php' // Path to the controller
-    });
-     // -->
+<script type="text/javascript"> 
+<!-- 
+$(document).ready(
+    function(){ 
+        $('article').Thesaurus({ 
+            effect: 'fade', 
+            caseSensitive: false 
+        }); 
+}); 
+// --> 
 </script>
 
+Available Options
 
-CONTROLLER
+caseSensitive
+    defines if the plugin does case sensitive search for the terms
+effect
+    transition effect for tooltip: fade or any manual 
+pushStats
+    states if the plugins collects tooltip click and view statistics into queue and uploads the 
+queue to the server every 5 sec (if it is not empty).
 
-The package includes a simple PHP library containing two data adapters: CSV (by default)
-and MySQL DB. Please find examples of use in controller.csv.php and controller.db.php respectively.
+Back-end configuration
 
-In the case of MySQL DB adapter you'll get tooltip visits and clicks statistics reflected into DB.
-You can easily write another adapter, which will implement Thesaurus_Adapter_Interface
+In ./app/Config/config.php you will find a CSV file is set up as data source. If you want to 
+use DB, just uncomments another configuration section.
+
+Manual transition effects making
+
+You can make your own effect for Thesaurus using CSS3. Just describe the initial state of 
+tooltip overlay and final state. Name those CSS classes by the pattern thesaurus-EFFECTNAME-start 
+and thesaurus-EFFECTNAME-end:
+
+.thesaurus-scale-start {
+    opacity: 0; 
+    -moz-transform: scale(0.1);
+}    
+.thesaurus-scale-end {
+    -webkit-transition: all 1s ease-in-out;
+        -moz-transition: all 1s ease-in-out;
+        -o-transition: all 1s ease-in-out;
+            transition: all 1s ease-in-out; 
+    opacity: 1 !important;
+    -moz-transform: scale(1);
+}
+
+Now you can just specify the effect (EFFECTNAME) in the plugin options.
 
 REFERENCES
 Source code is available to download at http://code.google.com/p/jquery-thesaurus/downloads/list
