@@ -14,6 +14,12 @@ include_once dirname(__FILE__) . "/Storage/Exception.php";
  */
 class Lib_Storage 
 {
+    /**
+     *
+     * @param Lib_Config $config
+     * @return Lib_Storage_Adapter_Interface
+     * @throws Lib_Storage_Exception 
+     */
     public static function factory(Lib_Config $config)
     {
         $adapter = $config->dataSource->driver;
