@@ -9,7 +9,7 @@ class Lib_Mbstring
 {
     /**
      * Converts mb. string to set of its UTF8 codes
-     * @param string $line
+     * @param string $data
      * @return string
      */
     public static function ordString($data)
