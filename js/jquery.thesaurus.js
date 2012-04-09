@@ -122,6 +122,9 @@
                         left = targetEl.offset().left + targetEl.width() / 2,
                         canvas = _boundingBox.find(' > .thesaurus-canvas');
                     
+                    canvas.removeClass('upwards').removeClass('downwards')
+                        .removeClass('leftwards').removeClass('rightwards');
+                    
                     if (top  < $(window).scrollTop()) {
                         top = targetEl.offset().top + targetEl.height() + 5;
                         canvas.addClass('downwards');
