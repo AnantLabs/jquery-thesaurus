@@ -22,10 +22,10 @@ Now let's apply the plugin on a set of elements when document is ready. Here any
 <script type="text/javascript"> 
 <!-- 
 $(document).ready(function(){ 
-$('article').Thesaurus({ 
-effect: 'fade', 
-caseSensitive: false 
-}); 
+   $('article').Thesaurus({ 
+      effect: 'fade', 
+      caseSensitive: false 
+    }); 
 }); // --> </script>
 }}}
 
@@ -46,7 +46,17 @@ In ./app/Config/config.php you will find a CSV file is set up as data source. If
 
 You can make your own effect for Thesaurus using CSS3. Just describe the initial state of tooltip overlay and final state. Name those CSS classes by the pattern thesaurus-EFFECTNAME-start and thesaurus-EFFECTNAME-end:
 {{{
-.thesaurus-scale-start { opacity: 0; -moz-transform: scale(0.1); } .thesaurus-scale-end { -webkit-transition: all 1s ease-in-out; -moz-transition: all 1s ease-in-out; -o-transition: all 1s ease-in-out; transition: all 1s ease-in-out; opacity: 1 !important; -moz-transform: scale(1); }
+.thesaurus-scale-start { 
+opacity: 0; -moz-transform: scale(0.1); 
+} 
+.thesaurus-scale-end { 
+-webkit-transition: all 1s ease-in-out; 
+-moz-transition: all 1s ease-in-out; 
+-o-transition: all 1s ease-in-out; 
+transition: all 1s ease-in-out; 
+opacity: 1 !important; 
+-moz-transform: scale(1); 
+}
 }}}
 
 Now you can just specify the effect (EFFECTNAME) in the plugin options.
