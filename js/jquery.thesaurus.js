@@ -210,6 +210,10 @@
                     // Renders tooltip with Loading...
                     _boundingBox = $(TOOLTIP_TPL).appendTo('body');
                     _boundingBox.find('a.term').text(term);
+                    // IE 8 supports :after CSS pseudo-property, buut doesn't transporent border-color
+                    if ($.browser.msie && Math.floor($.browser.version) < 10) {
+                        _boundingBox.find(' > .thesaurus-canvas').removeClass('thesaurus-canvas');
+                    }
                     _boundingBox
                         .addClass('thesaurus-visible');
                     _setTransitionState('start'); 
